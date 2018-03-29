@@ -8,13 +8,20 @@ class App extends Component {
     console.log('just kidding');
   }
 
+  fill() {
+    console.log('you\'re funny');
+  }
+
   render() {
     return (
       <div className="App">
         <h1> Sudoku Solver </h1>
         <div className='container'>
           <SudokuGrid />
-          <div className='solvebutton' onClick={this.solve}>Solve!</div>
+          <div className='buttons'>
+            <div className='button' onClick={this.fill}>Fill!</div>
+            <div className='button' onClick={this.solve}>Solve!</div>
+          </div>
         </div>
       </div>
     );
