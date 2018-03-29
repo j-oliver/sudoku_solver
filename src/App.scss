@@ -15,11 +15,63 @@
       height: 450px;
       border: 2px solid black;
 
-      .cell {
-        box-shadow: inset 0px 0px 0px 1px black;
-        background-color: #eee;
-        width: 50px;
-        height: 50px;
+      .square {
+        position: relative;
+        .cell {
+          text-align: center;
+          font-size: 24px;
+          line-height: 50px;
+          box-shadow: inset 0px 0px 0px 1px black;
+          background-color: #eee;
+          width: 50px;
+          height: 50px;
+          user-select: none;
+        }
+
+        .numberpicker {
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-around;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 44px;
+          height: 44px;
+          z-index: 2;
+          margin: 3px;
+          background-color: rgba(255, 255, 255, 0.9);
+
+          &__number {
+            text-align: center;
+            padding: 0px;
+            width: 33%;
+            height: 33%;
+            font-size: 12px;
+          }
+          &__number:hover{
+            cursor: pointer;
+            color: red;
+          }
+        }
+      }
+
+      // right border
+      .square:nth-child(3n + 0) > .cell {
+        box-shadow: inset -1px 0px 0px 1px black;
+      }
+
+      // bottom border
+      .square:nth-child(n + 19):nth-child(-n + 27) > .cell,
+      .square:nth-child(n + 46):nth-child(-n + 54) > .cell {
+        box-shadow: inset 0px -1px 0px 1px black;
+      }
+
+      // right and bottom border
+      .square:nth-child(21) > .cell,
+      .square:nth-child(24) > .cell,
+      .square:nth-child(48) > .cell,
+      .square:nth-child(51) > .cell {
+        box-shadow: inset -1px -1px 0px 1px black !important;
       }
     }
 
