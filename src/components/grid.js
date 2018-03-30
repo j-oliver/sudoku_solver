@@ -31,11 +31,8 @@ export default class SudokuGrid extends Component {
   constructor() {
     super();
 
-    const grid = Array()
-
     this.state = {
       solved: false,
-      grid: createEmpty2dArray(9, 9),
       numberpickerIndex: { rIndex: -1, cIndex: -1 }
     }
   }
@@ -60,17 +57,17 @@ export default class SudokuGrid extends Component {
   }
 
   pickNumber(rIndex, cIndex, value) {
-    const grid = this.state.grid.slice(0);
+    const grid = this.props.grid.slice(0);
     grid[rIndex][cIndex] = value;
 
     this.setState({
       numberpickerIndex: { rIndex: -1, cIndex: -1 },
-      grid
     });
   }
 
   getGrid() {
-    return this.state.grid.map((row, rindex) => {
+    const grid = this.props.grid;
+    return grid.map((row, rindex) => {
       return row.map((cell, cindex) => {
         const key = `${rindex}${cindex}`;
         const hasNumberPicker =
@@ -85,11 +82,6 @@ export default class SudokuGrid extends Component {
           setNumberPicker={() => this.setNumberPicker(rindex, cindex)}/>;
       });
     });
-  }
-
-  createNewSudoku() {
-    // const availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    // const sudoku = Array(9).fill(Array(9).fill(0));
   }
 
   render() {
