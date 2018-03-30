@@ -1,48 +1,57 @@
 import React, { Component } from 'react';
 
 import Square from './square.js';
+import NumberPicker from './numberpicker.js';
 import sudoku from '../sudoku/sudoku.js';
+
 
 export default class SudokuGrid extends Component {
   constructor() {
     super();
 
     this.state = {
-      solved: false,
-      numberpickerIndex: { rIndex: -1, cIndex: -1 }
+      numberpicker: { rindex: -1, cindex: -1 }
     }
+
+    this._pickNumber = this._pickNumber.bind(this);
   }
 
+  _pickNumber(number, rindex, cindex) {
+    this.props.setNumber(number, rindex, cindex);
 
-  setNumberPicker(rIndex, cIndex) {
-    this.setState({ numberpickerIndex: { rIndex, cIndex }})
+    this.setState({ numberpicker: { rindex: -1, cindex: -1 }});
   }
 
-  pickNumber(rIndex, cIndex, value) {
-    const grid = this.props.grid.slice(0);
-    grid[rIndex][cIndex] = value;
+  resetNumberPicker() {
+    this.setState({ numberpicker: { rindex: -1, cindex: -1 }});
+  }
 
-    this.setState({
-      numberpickerIndex: { rIndex: -1, cIndex: -1 },
-    });
+  setNumberPicker(rindex, cindex) {
+    this.setState({ numberpicker: { rindex, cindex }})
   }
 
   getGrid() {
     const grid = this.props.grid;
+
     return grid.map((row, rindex) => {
       return row.map((cell, cindex) => {
         const key = `${rindex}${cindex}`;
-        const hasNumberPicker =
-          this.state.numberpickerIndex.rIndex === rindex &&
-          this.state.numberpickerIndex.cIndex === cindex;
         const availableNumbers = sudoku.getValidNumbersForCell(rindex, cindex, grid);
+
+        const hasNumberPicker =
+          this.state.numberpicker.rindex === rindex &&
+          this.state.numberpicker.cindex === cindex;
+        const numberpicker = hasNumberPicker
+          ? <NumberPicker
+              availableNumbers={availableNumbers}
+              enterNumber={(number) => this._pickNumber(number, rindex, cindex)}
+              onBlur={this.resetNumberPicker}/>
+          : undefined;
 
         return <Square
           squarekey={key}
           value={cell}
-          availableNumbers={availableNumbers}
-          pickNumber={(value) => this.pickNumber(rindex, cindex, value)}
-          hasNumberPicker={hasNumberPicker}
+          numberpicker={numberpicker}
           setNumberPicker={() => this.setNumberPicker(rindex, cindex)}/>;
       });
     });

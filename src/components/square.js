@@ -1,42 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-function NumberPicker(props) {
+function Square(props) {
   return (
-    <div className='numberpicker'>
+    <div className='square'>
       {
-        [1,2,3,4,5,6,7,8,9].map(number => {
-          if (props.availableNumbers.indexOf(number) !== -1) {
-            return (<span
-              className='numberpicker__number'
-              onClick={() => props.enterNumber(number)}>
-              {number}
-            </span>);
-          } else {
-            return (<span className='numberpicker__number unavailable'>
-              {number}
-            </span>);
-          }
-        })
+        props.numberpicker
       }
+      <div key={props.squarekey} className='cell' onClick={props.setNumberPicker}>
+        { props.value }
+      </div>
     </div>
   );
 }
 
-export default class Square extends Component {
-  render() {
-    return (
-      <div className='square'>
-        {
-          this.props.hasNumberPicker
-            ? <NumberPicker
-                availableNumbers={this.props.availableNumbers}
-                enterNumber={(number) => this.props.pickNumber(number)}/>
-            : undefined
-        }
-        <div key={this.props.squarekey} className='cell' onClick={this.props.setNumberPicker}>
-          { this.props.value }
-        </div>
-      </div>
-    );
-  }
-}
+export default Square;
