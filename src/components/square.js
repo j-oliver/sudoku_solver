@@ -5,11 +5,17 @@ function NumberPicker(props) {
     <div className='numberpicker'>
       {
         [1,2,3,4,5,6,7,8,9].map(number => {
-          return (<span
-            className='numberpicker__number'
-            onClick={() => props.enterNumber(number)}>
-            {number}
-          </span>);
+          if (props.availableNumbers.indexOf(number) !== -1) {
+            return (<span
+              className='numberpicker__number'
+              onClick={() => props.enterNumber(number)}>
+              {number}
+            </span>);
+          } else {
+            return (<span className='numberpicker__number unavailable'>
+              {number}
+            </span>);
+          }
         })
       }
     </div>
@@ -22,7 +28,9 @@ export default class Square extends Component {
       <div className='square'>
         {
           this.props.hasNumberPicker
-            ? <NumberPicker enterNumber={(number) => this.props.pickNumber(number)}/>
+            ? <NumberPicker
+                availableNumbers={this.props.availableNumbers}
+                enterNumber={(number) => this.props.pickNumber(number)}/>
             : undefined
         }
         <div key={this.props.squarekey} className='cell' onClick={this.props.setNumberPicker}>

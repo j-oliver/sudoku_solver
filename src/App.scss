@@ -47,10 +47,19 @@
             width: 33%;
             height: 33%;
             font-size: 12px;
+            user-select: none;
           }
           &__number:hover{
             cursor: pointer;
             color: red;
+          }
+
+          &__number.unavailable {
+            opacity: 0.5;
+          }
+
+          &__number:hover.unavailable {
+            color: black;
           }
         }
       }
