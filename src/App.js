@@ -10,7 +10,7 @@ class App extends Component {
 
     this.state = {
       difficulty: 'easy',
-      grid: sudoku.createEmpty2dArray(9, 9, '')
+      grid: sudoku.createSudoku('easy')
     }
 
     this.solve = this.solve.bind(this);
