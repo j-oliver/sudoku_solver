@@ -32,12 +32,15 @@ class App extends Component {
   }
 
   solve() {
-    console.log('just kidding');
+    const solvedSudoku = sudoku.solveSudoku(this.state.grid);
+
+    this.setState({ grid: solvedSudoku });
   }
 
-  newSudoku() {
-    const grid = sudoku.createSudoku(sudoku.createEmpty2dArray(9, 9, 0));
-    this.setState({ grid });
+  createSudoku() {
+    const newSudoku = sudoku.createSudoku(this.state.difficulty);
+
+    this.setState({ grid: newSudoku });
   }
 
 

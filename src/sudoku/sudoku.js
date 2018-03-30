@@ -1,7 +1,24 @@
 const size = 9;
 // const grid = createEmpty2dArray(size, size);
 
+
+// https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 const sudoku = {
+  difficultySettings: {
+    easy: 50,
+    medium: 40,
+    hard: 30,
+    extreme: 25
+  },
+
   createEmpty2dArray: (xlength, ylength, fill='') => {
     return Array.apply(null, Array(xlength)).map(x =>
            Array.apply(null, Array(ylength)).map(x => fill));
@@ -104,17 +121,100 @@ const sudoku = {
     return validNumbers.includes(num);
   },
 
-  createSudoku(grid) {
-    const availableNumbers = [1,2,3,4,5,6,7,8,9];
+  getReadableSudoku: (sudoku) => {
+    return sudoku.map(row => row.map(cell => cell || ''));
+  },
+
+  createSudoku(difficulty) {
+    const totalCells = size * size;
+    const numberAmount = totalCells - sudoku.difficultySettings[difficulty];
+    let grid = sudoku.createEmpty2dArray(size, size, 0);
+
+    grid = sudoku.solveSudoku(grid);
+
+    for(let i = 0; i < numberAmount; i++) {
+      var { rindex, cindex } = getRandomCellAndNumber();
+
+      if (grid[rindex][cindex] !== 0) {
+        grid[rindex][cindex] = 0;
+      } else {
+        i--;
+      }
+    }
+
+    return sudoku.getReadableSudoku(grid);
+
+    function getRandomCellAndNumber() {
+      return {
+        rindex: [0,1,2,3,4,5,6,7,8][Math.floor(Math.random() * size)],
+        cindex: [0,1,2,3,4,5,6,7,8][Math.floor(Math.random() * size)],
+      };
+    }
+  },
+
+  // createSudoku(difficulty) {
+  //   const numberOfNumbers = sudoku.difficultySettings[difficulty];
+  //   let grid = sudoku.createEmpty2dArray(size, size, 0);
+
+  //   do {
+  //     grid = sudoku.createEmpty2dArray(size, size, 0);
+  //     for(let i = 0; i < numberOfNumbers; i++) {
+  //       do {
+  //         var { number, rindex, cindex } = getRandomCellAndNumber();
+  //       } while (!sudoku.isXAllowedForCell(number, rindex, cindex, grid))
+
+  //       grid[rindex][cindex] = number;
+  //     }
+  //   } while (!sudoku.sudokuSolvable(grid));
+
+  //   grid = sudoku.getReadableSudoku(grid);
+
+  //   return grid;
+
+  //   function getRandomCellAndNumber() {
+  //     return {
+  //       number: [1,2,3,4,5,6,7,8,9][Math.floor(Math.random() * size)],
+  //       rindex: [0,1,2,3,4,5,6,7,8][Math.floor(Math.random() * size)],
+  //       cindex: [0,1,2,3,4,5,6,7,8][Math.floor(Math.random() * size)],
+  //     };
+  //   }
+  // },
+
+  sudokuSolvable(grid){
+    let gridCopy = grid.slice(0);
+    gridCopy = sudoku.fillTrivialSolutions(gridCopy);
+
+    return sudoku.solveSudoku(gridCopy) !== false;
+  },
+
+  fillTrivialSolutions(grid){
+    const gridCopy = grid.slice(0);
+
     for(let i = 0; i < size; i++) {
       for(let j = 0; j < size; j++) {
-        if (grid[i][j] === 0) {
-          const validNumbers = sudoku.getValidNumbersForCell(i, j, grid);
+        let cell = gridCopy[i][j];
+        if (cell === '' || cell === 0) {
+          const validNumbers = sudoku.getValidNumbersForCell(i, j, gridCopy);
+
+          if (validNumbers.length === 1) {
+            gridCopy[i][j] = validNumbers[0];
+          }
+        }
+      }
+    }
+
+    return gridCopy;
+  },
+
+  solveSudoku(grid) {
+    for(let i = 0; i < size; i++) {
+      for(let j = 0; j < size; j++) {
+        if (grid[i][j] === 0 || grid[i][j] === '') {
+          const validNumbers = shuffle(sudoku.getValidNumbersForCell(i, j, grid));
 
           for(let m = 0; m < validNumbers.length; m++) {
-            const randomNumber = validNumbers[Math.floor(Math.random() * validNumbers.length)];
-            grid[i][j] = randomNumber;
-            if (sudoku.createSudoku(grid) !== false) {
+            grid[i][j] = validNumbers[m];
+            if (sudoku.solveSudoku(grid) !== false) {
               return grid;
             }
             grid[i][j] = 0;
