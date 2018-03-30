@@ -8,6 +8,27 @@
   }
   .container {
     width: 450px;
+
+    .settings {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+      width: 225px;
+
+      .setting {
+        border: 2px solid black;
+        padding: 5px;
+        margin: 5px;
+        width: 80px;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      .setting.selected {
+        background-color: green;
+      }
+
+    }
     .sudokugrid {
       display: flex;
       flex-flow: row wrap;
@@ -98,4 +119,6 @@
       }
     }
   }
+
+
 }

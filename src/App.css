@@ -6,6 +6,20 @@
     font-size: 32px; }
   .App .container {
     width: 450px; }
+    .App .container .settings {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+      width: 225px; }
+      .App .container .settings .setting {
+        border: 2px solid black;
+        padding: 5px;
+        margin: 5px;
+        width: 80px;
+        text-align: center;
+        cursor: pointer; }
+      .App .container .settings .setting.selected {
+        background-color: green; }
     .App .container .sudokugrid {
       display: flex;
       flex-flow: row wrap;
