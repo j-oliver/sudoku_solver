@@ -13,8 +13,8 @@ function shuffle(a) {
 
 const sudoku = {
   difficultySettings: {
-    easy: 50,
-    medium: 40,
+    easy: 40,
+    medium: 35,
     hard: 30,
     extreme: 25
   },
@@ -152,34 +152,6 @@ const sudoku = {
     }
   },
 
-  // createSudoku(difficulty) {
-  //   const numberOfNumbers = sudoku.difficultySettings[difficulty];
-  //   let grid = sudoku.createEmpty2dArray(size, size, 0);
-
-  //   do {
-  //     grid = sudoku.createEmpty2dArray(size, size, 0);
-  //     for(let i = 0; i < numberOfNumbers; i++) {
-  //       do {
-  //         var { number, rindex, cindex } = getRandomCellAndNumber();
-  //       } while (!sudoku.isXAllowedForCell(number, rindex, cindex, grid))
-
-  //       grid[rindex][cindex] = number;
-  //     }
-  //   } while (!sudoku.sudokuSolvable(grid));
-
-  //   grid = sudoku.getReadableSudoku(grid);
-
-  //   return grid;
-
-  //   function getRandomCellAndNumber() {
-  //     return {
-  //       number: [1,2,3,4,5,6,7,8,9][Math.floor(Math.random() * size)],
-  //       rindex: [0,1,2,3,4,5,6,7,8][Math.floor(Math.random() * size)],
-  //       cindex: [0,1,2,3,4,5,6,7,8][Math.floor(Math.random() * size)],
-  //     };
-  //   }
-  // },
-
   sudokuSolvable(grid){
     let gridCopy = grid.slice(0);
     gridCopy = sudoku.fillTrivialSolutions(gridCopy);
@@ -224,7 +196,7 @@ const sudoku = {
         }
       }
     }
-  }
+  },
 }
 
 sudoku.grid = sudoku.createEmpty2dArray(size, size);
