@@ -1,77 +1,69 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import SudokuGrid from './components/grid';
+import Sudoku from './components/grid.js';
+import Options from './components/options.js';
+import Settings from './components/settings.js';
 import sudoku from './sudoku/sudoku.js';
 
 class App extends Component {
   constructor() {
     super();
 
-    this.state = {
-      difficulty: 'easy',
-      grid: sudoku.createSudoku('easy')
-    }
+    const difficulty = 'easy';
+    const initialgrid = sudoku.createSudoku('easy');
+    const grid = initialgrid.map(row => row.slice());
 
-    this.solve = this.solve.bind(this);
-    this.createSudoku = this.createSudoku.bind(this);
-    this.setDifficulty = this.setDifficulty.bind(this);
+    this.state = { difficulty, initialgrid, grid };
+
+
     this._setNumber = this._setNumber.bind(this);
+    this._setDifficulty = this._setDifficulty.bind(this);
+    this._solve = this._solve.bind(this);
+    this._createSudoku = this._createSudoku.bind(this);
+    this._resetSudoku = this._resetSudoku.bind(this);
   }
 
   _setNumber(number, rindex, cindex) {
-    const grid = this.state.grid.slice(0);
+    const grid = this.state.grid.slice();
 
     grid[rindex][cindex] = number;
 
     this.setState({ grid });
   }
 
-  setDifficulty(difficulty) {
+  _setDifficulty(difficulty) {
     this.setState({ difficulty: difficulty.toLowerCase() });
   }
 
-  solve() {
+  _solve() {
     const solvedSudoku = sudoku.solveSudoku(this.state.grid);
 
     this.setState({ grid: solvedSudoku });
   }
 
-  createSudoku() {
-    const newSudoku = sudoku.createSudoku(this.state.difficulty);
+  _createSudoku() {
+    const initialgrid = sudoku.createSudoku(this.state.difficulty);
+    const grid = initialgrid.map(row => row.slice());
 
-    this.setState({ grid: newSudoku });
+    this.setState({ initialgrid, grid });
+  }
+
+  _resetSudoku() {
+    const resetSudoku = this.state.initialgrid.map(row => row.slice());
+
+    this.setState({ grid: resetSudoku });
   }
 
 
   render() {
     return (
       <div className='App'>
-        <h1> Sudoku Solver </h1>
+        <h1>Motivation Sudoku</h1>
         <div className='container'>
-          <SudokuGrid grid={this.state.grid} setNumber={(n, r, c) => this._setNumber(n, r, c)}/>
-          <div className='buttons'>
-            <div className='button' onClick={() => this.createSudoku()}>
-              New Sudoku!
-            </div>
-            <div className='button' onClick={this.solve}>Solve!</div>
-          </div>
-          <div className='settings'>
-            {
-              ['Easy', 'Medium', 'Hard', 'Extreme'].map(d => {
-                return (<div
-                  className={
-                    `setting ${this.state.difficulty === d.toLowerCase() ? 'selected' : ''}`
-                  }
-                  onClick={() => this.setDifficulty(d)}>{d}
-                </div>);
-              })
-            }
-            {/*<div className='setting' onClick={() => this.setDifficulty('easy')}>Easy</div>
-            <div className='setting' onClick={() => this.setDifficulty('medium')}>Medium</div>
-            <div className='setting' onClick={() => this.setDifficulty('hard')}>Hard</div>
-            <div className='setting' onClick={() => this.setDifficulty('extreme')}>Extreme</div>*/}
-          </div>
+          <Sudoku initialgrid={this.state.initialgrid} grid={this.state.grid} setNumber={(n, r, c) => this._setNumber(n, r, c)}/>
+          <Options solve={this._solve} createSudoku={this._createSudoku} reset={this._resetSudoku}/>
+          <Settings difficulty={this.state.difficulty} setDifficulty={this._setDifficulty}/>
         </div>
       </div>
     );
