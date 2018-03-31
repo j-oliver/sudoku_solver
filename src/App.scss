@@ -49,6 +49,10 @@
           user-select: none;
         }
 
+        .cell.initial {
+          background-color: #ccc;
+        }
+
         .numberpicker {
           display: flex;
           flex-flow: row wrap;
