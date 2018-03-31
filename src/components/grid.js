@@ -4,30 +4,51 @@ import Square from './square.js';
 import NumberPicker from './numberpicker.js';
 import sudoku from '../sudoku/sudoku.js';
 
-
-export default class SudokuGrid extends Component {
+class Sudoku extends Component {
   constructor() {
     super();
 
     this.state = {
+      npExists: false,
       numberpicker: { rindex: -1, cindex: -1 }
     }
 
     this._pickNumber = this._pickNumber.bind(this);
+    this._resetNumberPicker = this._resetNumberPicker.bind(this);
   }
 
   _pickNumber(number, rindex, cindex) {
     this.props.setNumber(number, rindex, cindex);
 
-    this.setState({ numberpicker: { rindex: -1, cindex: -1 }});
+    this.setState({
+      npExists: false,
+      numberpicker: { rindex: -1, cindex: -1 }
+    });
   }
 
-  resetNumberPicker() {
-    this.setState({ numberpicker: { rindex: -1, cindex: -1 }});
+  _resetNumberPicker() {
+    // really hacky
+    setTimeout(() => {
+      this.setState({
+        npExists: false,
+        numberpicker: { rindex: -1, cindex: -1 }
+      });
+    }, 50);
   }
 
-  setNumberPicker(rindex, cindex) {
-    this.setState({ numberpicker: { rindex, cindex }})
+  _showNumberPicker(rindex, cindex) {
+    console.log('showNumberPicker called');
+    if (!this.state.npExists) {
+      console.log('npExists in showNumberPicker is false');
+      this.setState({
+        npExists: true,
+        numberpicker: { rindex, cindex }
+      });
+    }
+  }
+
+  cellIsBlocked(rindex, cindex) {
+    return this.props.initialgrid[rindex][cindex] !== '';
   }
 
   getGrid() {
@@ -45,14 +66,21 @@ export default class SudokuGrid extends Component {
           ? <NumberPicker
               availableNumbers={availableNumbers}
               enterNumber={(number) => this._pickNumber(number, rindex, cindex)}
-              onBlur={this.resetNumberPicker}/>
+              resetNumberPicker={this._resetNumberPicker}
+              stopPropagation={true}/>
           : undefined;
 
-        return <Square
-          squarekey={key}
-          value={cell}
-          numberpicker={numberpicker}
-          setNumberPicker={() => this.setNumberPicker(rindex, cindex)}/>;
+        if (this.cellIsBlocked(rindex, cindex)) {
+          return <Square css='initial' squarekey={key} value={cell}/>;
+        } else {
+          return <Square
+            squarekey={key}
+            value={cell}
+            css={''}
+            numberpicker={numberpicker}
+            showNumberPicker={() => this._showNumberPicker(rindex, cindex)}
+            resetNumberPicker={() => this._resetNumberPicker()}/>;
+        }
       });
     });
   }
@@ -67,3 +95,5 @@ export default class SudokuGrid extends Component {
     );
   }
 }
+
+export default Sudoku;
