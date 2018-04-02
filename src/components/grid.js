@@ -78,6 +78,7 @@ class Sudoku extends Component {
             value={cell}
             css={''}
             numberpicker={numberpicker}
+            removeNumber={() => this.props.setNumber('', rindex, cindex)}
             showNumberPicker={() => this._showNumberPicker(rindex, cindex)}
             resetNumberPicker={() => this._resetNumberPicker()}/>;
         }

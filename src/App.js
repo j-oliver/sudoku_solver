@@ -59,7 +59,7 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
-        <h1>Motivation Sudoku</h1>
+        <h1>Simple Sudoku</h1>
         <div className='container'>
           <Sudoku initialgrid={this.state.initialgrid} grid={this.state.grid} setNumber={(n, r, c) => this._setNumber(n, r, c)}/>
           <Options solve={this._solve} createSudoku={this._createSudoku} reset={this._resetSudoku}/>
