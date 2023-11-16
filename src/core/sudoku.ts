@@ -194,7 +194,10 @@ export function createNewSudoku(difficulty: Difficulty): Sudoku {
 export function solveSudoku(grid: Sudoku): Sudoku {
   const gridCopy = grid.slice(0);
 
+  let iterations = 0;
+
   if (solve()) {
+    console.log(iterations);
     return gridCopy;
   } else {
     throw 'no solution';
@@ -204,10 +207,11 @@ export function solveSudoku(grid: Sudoku): Sudoku {
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
         if (gridCopy[i][j] === 0) {
-          const validNumbers = shuffle(getValidNumbersForCell(i, j, gridCopy));
+          const validNumbers = getValidNumbersForCell(i, j, gridCopy);
 
           for (let m = 0; m < validNumbers.length; m++) {
             gridCopy[i][j] = validNumbers[m];
+            iterations++;
             if (solve() !== false) {
               return true;
             }
