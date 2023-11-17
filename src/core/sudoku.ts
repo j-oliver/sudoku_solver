@@ -1,4 +1,5 @@
 import { Difficulty, Sudoku } from '../types';
+import { slice2DArray } from '../utils';
 
 const size = 9;
 
@@ -25,28 +26,24 @@ const difficultySettings = {
   extreme: 25,
 };
 
-function slice2DArray(
-  arr: number[][],
-  fromX: number,
-  toX: number,
-  fromY: number,
-  toY: number
-): number[][] {
-  // Check if indices are within bounds
-  if (fromX < 0 || fromX >= arr.length || toX < 0 || toX >= arr.length) {
-    throw new Error('X indices are out of bounds');
+export function getSudokuGrids(sudoku: Sudoku): number[][][] {
+  const gridLength = Math.sqrt(size);
+
+  if (gridLength % 1 !== 0) {
+    throw new Error('Grid length is not a square number');
   }
 
-  if (fromY < 0 || fromY >= arr[0].length || toY < 0 || toY >= arr[0].length) {
-    throw new Error('Y indices are out of bounds');
+  const grids: number[][][] = [];
+
+  for (let i = 0; i < size; i += gridLength) {
+    for (let j = 0; j < size; j += gridLength) {
+      grids.push(
+        slice2DArray(sudoku, i, i + (gridLength - 1), j, j + (gridLength - 1))
+      );
+    }
   }
 
-  // Slice the 2D array based on the specified indices
-  const slicedArray: number[][] = arr
-    .slice(fromX, toX + 1)
-    .map(row => row.slice(fromY, toY + 1));
-
-  return slicedArray;
+  return grids;
 }
 
 function getInnerGrid(position: string, g: Sudoku) {
@@ -139,7 +136,7 @@ function getReadableSudoku(sudoku: Sudoku) {
   return sudoku.map(row => row.map(cell => cell || 0));
 }
 
-export function createNewSudoku(difficulty: Difficulty): Sudoku {
+export function createNewSudoku(size: number, difficulty: Difficulty): Sudoku {
   const totalCells = size * size;
   const numberAmount = totalCells - difficultySettings[difficulty];
   const sudoku = solveSudoku(createEmpty2dArray(size, size, 0));
@@ -191,14 +188,14 @@ export function createNewSudoku(difficulty: Difficulty): Sudoku {
 //   return gridCopy;
 // }
 
-export function solveSudoku(grid: Sudoku): Sudoku {
-  const gridCopy = grid.slice(0);
+export function solveSudoku(sudoku: Sudoku): Sudoku {
+  const sudokuCopy = sudoku.slice(0);
 
   let iterations = 0;
 
   if (solve()) {
     console.log(iterations);
-    return gridCopy;
+    return sudokuCopy;
   } else {
     throw 'no solution';
   }
@@ -206,16 +203,16 @@ export function solveSudoku(grid: Sudoku): Sudoku {
   function solve(): boolean {
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
-        if (gridCopy[i][j] === 0) {
-          const validNumbers = getValidNumbersForCell(i, j, gridCopy);
+        if (sudokuCopy[i][j] === 0) {
+          const validNumbers = getValidNumbersForCell(i, j, sudokuCopy);
 
           for (let m = 0; m < validNumbers.length; m++) {
-            gridCopy[i][j] = validNumbers[m];
+            sudokuCopy[i][j] = validNumbers[m];
             iterations++;
             if (solve() !== false) {
               return true;
             }
-            gridCopy[i][j] = 0;
+            sudokuCopy[i][j] = 0;
           }
 
           return false;

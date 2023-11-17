@@ -1,19 +1,15 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useContext, useState } from 'react';
 
 import { Square } from './Square';
 import { NumberPicker } from './NumberPicker';
 import { getValidNumbersForCell } from './core/sudoku';
-import { Sudoku } from './types';
+import { SudokuContext } from './SudokuContext';
 
-type Props = {
-  initialgrid: Sudoku;
-  grid: Sudoku;
-  setNumber: (number: number, rindex: number, cindex: number) => void;
-};
-
-export const SudokuGrid: FC<Props> = ({ initialgrid, grid, setNumber }) => {
+export const SudokuGrid: FC = () => {
   const [npExists, setNpExists] = useState(false);
   const [numberpicker, setNumberpicker] = useState({ rindex: -1, cindex: -1 });
+
+  const { sudoku, initialSudoku, setNumber } = useContext(SudokuContext);
 
   const pickNumber = useCallback(
     (number: number, rindex: number, cindex: number) => {
@@ -40,14 +36,14 @@ export const SudokuGrid: FC<Props> = ({ initialgrid, grid, setNumber }) => {
   }
 
   function cellIsBlocked(rindex: number, cindex: number) {
-    return initialgrid[rindex][cindex] !== 0;
+    return initialSudoku?.[rindex][cindex] !== 0;
   }
 
   function getGrid() {
-    return grid.map((row, rindex) => {
+    return sudoku?.map((row, rindex) => {
       return row.map((cell, cindex) => {
         const key = `${rindex}${cindex}`;
-        const availableNumbers = getValidNumbersForCell(rindex, cindex, grid);
+        const availableNumbers = getValidNumbersForCell(rindex, cindex, sudoku);
 
         const hasNumberPicker =
           numberpicker.rindex === rindex && numberpicker.cindex === cindex;
@@ -60,13 +56,12 @@ export const SudokuGrid: FC<Props> = ({ initialgrid, grid, setNumber }) => {
         ) : undefined;
 
         if (cellIsBlocked(rindex, cindex)) {
-          return <Square css="initial" squarekey={key} value={cell} />;
+          return <Square initial squarekey={key} value={cell} />;
         } else {
           return (
             <Square
               squarekey={key}
               value={cell}
-              css={''}
               numberpicker={np}
               removeNumber={() => setNumber(0, rindex, cindex)}
               showNumberPicker={() => showNumberPicker(rindex, cindex)}
@@ -78,7 +73,17 @@ export const SudokuGrid: FC<Props> = ({ initialgrid, grid, setNumber }) => {
   }
 
   return (
-    <div className="grid grid-cols-9 w-[450px] h-[450px] border-2">
+    <div className="grid grid-cols-[repeat(9,1fr)] grid-rows-[repeat(9,1fr)] w-[500px] h-[500px] border-2 border-black relative">
+      <div className="top-0 left-0 grid grid-cols-3 w-full h-full absolute pointer-events-none">
+        {new Array(9).fill(0).map((_, index) => {
+          return (
+            <div
+              key={index}
+              className="border-2 border-black text-center text-xl"
+            />
+          );
+        })}
+      </div>
       {getGrid()}
     </div>
   );

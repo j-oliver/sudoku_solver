@@ -16,7 +16,7 @@ export const Settings: FC<Props> = ({ difficulty, setDifficulty }) => {
   return (
     <div className="flex flex-wrap justify-around w-[225px]">
       {allDifficulties.map(d => {
-        const selected = difficulty === d ? 'bg-green' : '';
+        const selected = difficulty === d ? 'bg-green-500' : '';
         return (
           <div
             key={d}

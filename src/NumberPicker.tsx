@@ -20,13 +20,13 @@ export const NumberPicker: FC<Props> = ({
   return (
     <div
       ref={numberPickerRef}
-      className="grid grid-cols-3 justify-around bg-white opacity-95"
+      className="flex flex-wrap bg-white opacity-95 w-full h-full"
     >
       {numberpickergrid.map(number => {
         return availableNumbers.includes(number) ? (
           <div
             key={number}
-            className="text-center text-xs select-none hover:cursor-pointer hover:text-red-700"
+            className="flex justify-center items-center leading-[10px] text-xs font-bold w-1/3 h-1/3 select-none hover:cursor-pointer hover:text-red-700"
             onClick={() => enterNumber(number)}
           >
             {number}
@@ -34,7 +34,7 @@ export const NumberPicker: FC<Props> = ({
         ) : (
           <div
             key={number}
-            className="text-center text-xs select-none hover:cursor-pointer opacity-50 hover:text-black"
+            className="flex justify-center items-center leading-[10px] text-xs w-1/3 h-1/3 select-none hover:cursor-pointer opacity-50 hover:text-black"
           >
             {number}
           </div>
