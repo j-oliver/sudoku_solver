@@ -1,11 +1,12 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, MouseEventHandler, Key } from 'react';
 
 type Props = {
-  squarekey: string;
+  squarekey: Key;
   value: number;
   initial?: boolean;
   numberpicker?: ReactNode;
-  showNumberPicker?: () => void;
+  selected?: boolean;
+  selectSquare?: () => void;
   removeNumber?: () => void;
 };
 
@@ -13,25 +14,34 @@ export const Square: FC<Props> = ({
   squarekey,
   initial,
   value,
-  numberpicker,
+  selected,
   removeNumber,
-  showNumberPicker,
+  selectSquare,
 }) => {
-  const isInitial = initial ? 'bg-gray-400' : '';
-  return numberpicker ? (
-    numberpicker
-  ) : (
+  const isInitial = initial ? 'bg-gray-400 text-gray-800' : 'cursor-pointer';
+  const isSelected = selected ? 'bg-green-500' : '';
+
+  const onLeftClick: MouseEventHandler<HTMLDivElement> = () => {
+    if (!initial) {
+      selectSquare && selectSquare();
+    }
+  };
+
+  const onRightClick: MouseEventHandler<HTMLDivElement> = event => {
+    event.stopPropagation();
+    event.preventDefault();
+    if (!initial) {
+      removeNumber && removeNumber();
+    }
+  };
+  return (
     <div
       key={squarekey}
-      className={`flex justify-center items-center w-full h-full text-xl bg-gray-200 select-none ${isInitial} border-[1px] border-gray-500`}
-      onClick={() => showNumberPicker && showNumberPicker()}
-      onContextMenu={event => {
-        event.stopPropagation();
-        event.preventDefault();
-        removeNumber && removeNumber();
-      }}
+      className={`flex justify-center items-center w-full h-full text-xl bg-gray-200 select-none ${isInitial} ${isSelected} border-[1px] border-gray-500`}
+      onClick={onLeftClick}
+      onContextMenu={onRightClick}
     >
-      {value === 0 ? '' : value}
+      {value === 0 ? '' : value.toString(16).toUpperCase()}
     </div>
   );
 };
