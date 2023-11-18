@@ -38,10 +38,10 @@ export const SudokuGrid: FC = () => {
   }
 
   return (
-    <div className="w-[700px] h-[700px] flex flex-col justify-center items-center bg-slate-50 gap-4">
-      <div className={`grid ${gridSizes[size]} border-2 border-black relative`}>
+    <div className="flex h-[700px] w-[700px] flex-col items-center justify-center gap-4 bg-slate-50">
+      <div className={`grid ${gridSizes[size]} relative border-2 border-black`}>
         <div
-          className={`top-0 left-0 grid ${overlaySizes[size]} w-full h-full absolute pointer-events-none`}
+          className={`left-0 top-0 grid ${overlaySizes[size]} pointer-events-none absolute h-full w-full`}
         >
           {new Array(size * size).fill(0).map((_, index) => {
             return (
@@ -62,10 +62,10 @@ export const SudokuGrid: FC = () => {
               removeNumber={() => setNumber(0, r, c)}
               selectSquare={() => setNumberpicker({ rindex: r, cindex: c })}
             />
-          ))
+          )),
         )}
       </div>
-      <div className="h-12 w-full flex justify-center p-2">
+      <div className="flex h-12 w-full justify-center p-2">
         {sudoku && rindex !== -1 && cindex !== -1 && (
           <NumberPicker
             availableNumbers={getValidNumbersForCell(rindex, cindex, sudoku)}

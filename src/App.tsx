@@ -11,7 +11,7 @@ export const App = () => {
     <div className="flex flex-col items-center p-4">
       <Header />
       <SudokuContextProvider>
-        <div className="grid gap-8 grid-cols-[1fr,2fr,1fr] grid-rows-[1fr,1fr]">
+        <div className="grid grid-cols-[1fr,2fr,1fr] grid-rows-[1fr,1fr] gap-8">
           <div className="row-span-2">
             <Menu />
           </div>

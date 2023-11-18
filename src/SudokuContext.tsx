@@ -65,11 +65,11 @@ export const SudokuContextProvider: FC<Props> = ({ children }) => {
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
   const [size, setSize] = useState<Size>(3);
   const [initialSudoku, setInitialSudoku] = useState(() =>
-    createNewSudoku(size, difficulty)
+    createNewSudoku(size, difficulty),
   );
   const [sudokuHistory, dispatch] = useReducer<Reducer<State, Action>>(
     arrayReducer,
-    initialState
+    initialState,
   );
   const { time, stop, reset, startTimer } = useTimer();
 

@@ -50,7 +50,7 @@ export const useTimer = (): Timer => {
     const secs = seconds % 60;
 
     return `${formatTimeUnit(hours)}:${formatTimeUnit(
-      minutes
+      minutes,
     )}:${formatTimeUnit(secs)}`;
   }, []);
 

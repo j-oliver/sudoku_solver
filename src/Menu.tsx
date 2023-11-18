@@ -15,10 +15,10 @@ export const Menu: FC = () => {
   }, [createSudoku, nextSize, nextDifficulty, start]);
 
   return (
-    <div className="flex flex-col gap-8 justify-between shadow-lg p-4">
-      <h1 className="w-full text-center p-4 text-2xl">New Sudoku</h1>
+    <div className="flex flex-col justify-between gap-8 p-4 shadow-lg">
+      <h1 className="w-full p-4 text-center text-2xl">New Sudoku</h1>
       <div className="flex flex-col">
-        <h2 className="font-bold text-lg mb-4">Difficulty</h2>
+        <h2 className="mb-4 text-lg font-bold">Difficulty</h2>
         <div className="grid grid-cols-2 gap-4">
           <Button
             onClick={() => setNextDifficulty('easy')}
@@ -55,8 +55,8 @@ export const Menu: FC = () => {
         </div>
       </div>
       <div className="flex flex-col">
-        <h2 className="font-bold text-xl">Size</h2>
-        <div className="w-full flex items-center justify-center gap-4">
+        <h2 className="text-xl font-bold">Size</h2>
+        <div className="flex w-full items-center justify-center gap-4">
           <Button
             onClick={() => setNextSize(2)}
             className={`${nextSize === 2 && 'bg-blue-600'}`}

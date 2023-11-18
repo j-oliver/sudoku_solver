@@ -14,13 +14,13 @@ const allDifficulties: Difficulty[] = ['easy', 'medium', 'hard', 'extreme'];
 
 export const Settings: FC<Props> = ({ difficulty, setDifficulty }) => {
   return (
-    <div className="flex flex-wrap justify-around w-[225px]">
+    <div className="flex w-[225px] flex-wrap justify-around">
       {allDifficulties.map(d => {
         const selected = difficulty === d ? 'bg-green-500' : '';
         return (
           <div
             key={d}
-            className={`border-2 border-solid border-black p-1 m-1 w-[80px] text-center cursor-pointer ${selected}`}
+            className={`m-1 w-[80px] cursor-pointer border-2 border-solid border-black p-1 text-center ${selected}`}
             onClick={() => setDifficulty(d)}
           >
             {capitalize(d)}

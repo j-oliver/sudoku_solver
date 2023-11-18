@@ -26,7 +26,7 @@ export const NumberPicker: FC<Props> = ({
         return availableNumbers.includes(number) ? (
           <div
             key={number}
-            className="flex justify-center items-center shadow-lg rounded-md w-10 h-10 border-2 border-gray-600 hover:w-12 hover:h-12  font-bold select-none hover:cursor-pointer hover:text-red-700"
+            className="flex h-10 w-10 select-none items-center justify-center rounded-md border-2 border-gray-600 font-bold shadow-lg  hover:h-12 hover:w-12 hover:cursor-pointer hover:text-red-700"
             onClick={() => enterNumber(number)}
           >
             {number.toString(17).toUpperCase()}
@@ -34,7 +34,7 @@ export const NumberPicker: FC<Props> = ({
         ) : (
           <div
             key={number}
-            className="flex justify-center items-center shadow-lg rounded-md w-10 h-10 border-2 border-gray-600 hover:w-12 hover:h-12  select-none hover:cursor-pointer opacity-50 hover:text-black"
+            className="flex h-10 w-10 select-none items-center justify-center rounded-md border-2 border-gray-600 opacity-50 shadow-lg  hover:h-12 hover:w-12 hover:cursor-pointer hover:text-black"
           >
             {number.toString(17).toUpperCase()}
           </div>

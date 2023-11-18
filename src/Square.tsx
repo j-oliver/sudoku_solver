@@ -37,7 +37,7 @@ export const Square: FC<Props> = ({
   return (
     <div
       key={squarekey}
-      className={`flex justify-center items-center w-full h-full text-xl bg-gray-200 select-none ${isInitial} ${isSelected} border-[1px] border-gray-500`}
+      className={`flex h-full w-full select-none items-center justify-center border-[1px] border-gray-500 bg-gray-200 text-xl ${isInitial} ${isSelected} `}
       onClick={onLeftClick}
       onContextMenu={onRightClick}
     >

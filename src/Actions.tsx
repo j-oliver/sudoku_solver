@@ -8,12 +8,12 @@ export const Actions = () => {
   const { resetSudoku, solve, undo, redo, hasNext, hasPrev } =
     useContext(SudokuContext);
   return (
-    <div className="flex flex-col justify-between items-center gap-4">
-      <div className="flex-1 flex justify-center items-center w-full gap-8">
+    <div className="flex flex-col items-center justify-between gap-4">
+      <div className="flex w-full flex-1 items-center justify-center gap-8">
         <Button
           onClick={undo}
           disabled={!hasPrev}
-          className={`p-4 w-20 h-20 border-none rounded-none ${
+          className={`h-20 w-20 rounded-none border-none p-4 ${
             hasPrev && 'hover:bg-slate-100'
           } shadow-none`}
         >
@@ -26,7 +26,7 @@ export const Actions = () => {
         <Button
           onClick={redo}
           disabled={!hasNext}
-          className={`p-4 w-20 h-20 border-none rounded-none ${
+          className={`h-20 w-20 rounded-none border-none p-4 ${
             hasNext && 'hover:bg-slate-100'
           } shadow-none`}
         >
@@ -37,10 +37,10 @@ export const Actions = () => {
           )}
         </Button>
       </div>
-      <Button onClick={resetSudoku} className="bg-gray-300 w-full p-8">
+      <Button onClick={resetSudoku} className="w-full bg-gray-300 p-8">
         Reset
       </Button>
-      <Button onClick={solve} className="bg-orange-500 w-full p-8">
+      <Button onClick={solve} className="w-full bg-orange-500 p-8">
         Solve
       </Button>
     </div>

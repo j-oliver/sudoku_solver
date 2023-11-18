@@ -3,7 +3,7 @@ export function slice2DArray<T>(
   fromX: number,
   toX: number,
   fromY: number,
-  toY: number
+  toY: number,
 ): T[][] {
   // Check if indices are within bounds
   if (fromX < 0 || fromX >= arr.length || toX < 0 || toX >= arr.length) {
@@ -34,7 +34,7 @@ export function shuffle<T>(a: T[]): T[] {
 export function createEmpty2dArray<T>(
   xlength: number,
   ylength: number,
-  fill: T
+  fill: T,
 ): T[][] {
   return new Array(xlength).fill(0).map(() => new Array(ylength).fill(fill));
 }
