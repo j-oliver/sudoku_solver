@@ -38,7 +38,7 @@ export const SudokuGrid: FC = () => {
   }
 
   return (
-    <div className="flex h-[700px] w-[700px] flex-col items-center justify-center gap-4 bg-slate-50">
+    <div className="flex h-[700px] w-[700px] flex-col items-center justify-center gap-4">
       <div className={`grid ${gridSizes[size]} relative border-2 border-black`}>
         <div
           className={`left-0 top-0 grid ${overlaySizes[size]} pointer-events-none absolute h-full w-full`}
@@ -65,7 +65,7 @@ export const SudokuGrid: FC = () => {
           )),
         )}
       </div>
-      <div className="flex h-12 w-full justify-center p-2">
+      <div className="flex h-14 w-full justify-center">
         {sudoku && rindex !== -1 && cindex !== -1 && (
           <NumberPicker
             availableNumbers={getValidNumbersForCell(rindex, cindex, sudoku)}

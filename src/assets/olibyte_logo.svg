@@ -1,0 +1,15 @@
+<svg width="77" height="77" viewBox="0 0 77 77" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M77 38.5L39.2114 38.7947L65.7236 65.7236L38.7947 39.2114L38.5 77L38.2053 39.2114L11.2764 65.7236L37.7886 38.7947L-1.68289e-06 38.5L37.7886 38.2053L11.2764 11.2764L38.2053 37.7886L38.5 -1.68289e-06L38.7947 37.7886L65.7236 11.2764L39.2114 38.2053L77 38.5Z"
+    fill="black" />
+  <circle cx="71.4757" cy="5.52428" r="5.52428" transform="rotate(90 71.4757 5.52428)" fill="black" />
+  <circle cx="71.4757" cy="38.5" r="5.52428" transform="rotate(90 71.4757 38.5)" fill="black" />
+  <circle cx="71.4757" cy="71.4757" r="5.52428" transform="rotate(90 71.4757 71.4757)" fill="black" />
+  <circle cx="38.5" cy="71.4757" r="5.52428" transform="rotate(90 38.5 71.4757)" fill="black" />
+  <circle cx="38.5" cy="5.52428" r="5.52428" transform="rotate(90 38.5 5.52428)" fill="black" />
+  <circle cx="5.5243" cy="38.5" r="5.52428" transform="rotate(90 5.5243 38.5)" fill="black" />
+  <circle cx="5.5243" cy="71.4757" r="5.52428" transform="rotate(90 5.5243 71.4757)" fill="black" />
+  <circle cx="5.5243" cy="5.52428" r="5.52428" transform="rotate(90 5.5243 5.52428)" fill="black" />
+  <circle cx="38.5" cy="38.5" r="13.4128" transform="rotate(90 38.5 38.5)" fill="white"
+    stroke="black" stroke-width="7" />
+</svg>

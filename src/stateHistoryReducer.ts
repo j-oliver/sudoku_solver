@@ -17,19 +17,11 @@ export interface State {
 export const arrayReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'OVERWRITE': {
-      return {
-        ...state,
-        data: action.sudoku,
-        history: [...state.history, action.sudoku.map(row => [...row])],
-        currentIndex: 0,
-      };
+      const nextHistory = [action.sudoku.map(row => [...row])];
+      return { data: action.sudoku, history: nextHistory, currentIndex: 0 };
     }
     case 'RESET': {
-      return {
-        data: [[]],
-        history: [[]],
-        currentIndex: 0,
-      };
+      return { ...state, data: [[]], currentIndex: 0 };
     }
     case 'INSERT': {
       const { r, c, num } = action;
@@ -37,27 +29,23 @@ export const arrayReducer = (state: State, action: Action): State => {
       newArray[r][c] = num;
       const nextHistory = state.history.slice(0, state.currentIndex + 1);
       return {
-        ...state,
         data: newArray,
         history: [...nextHistory, newArray],
         currentIndex: state.currentIndex + 1,
       };
     }
-
     case 'REMOVE': {
       const { r, c } = action;
       const updatedArray = state.data.map(row => [...row]);
       updatedArray[r][c] = 0;
       const nextHistory = state.history.slice(0, state.currentIndex + 1);
       return {
-        ...state,
         data: updatedArray,
         history: [...nextHistory, updatedArray],
         currentIndex: state.currentIndex + 1,
       };
     }
-
-    case 'UNDO':
+    case 'UNDO': {
       if (state.currentIndex > 0) {
         const undoIndex = state.currentIndex - 1;
         const undoArray = state.history[undoIndex];
@@ -68,8 +56,8 @@ export const arrayReducer = (state: State, action: Action): State => {
         };
       }
       return state;
-
-    case 'REDO':
+    }
+    case 'REDO': {
       if (state.currentIndex < state.history.length - 1) {
         const redoIndex = state.currentIndex + 1;
         const redoArray = state.history[redoIndex];
@@ -80,7 +68,7 @@ export const arrayReducer = (state: State, action: Action): State => {
         };
       }
       return state;
-
+    }
     default:
       return state;
   }

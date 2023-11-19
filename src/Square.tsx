@@ -41,7 +41,7 @@ export const Square: FC<Props> = ({
       onClick={onLeftClick}
       onContextMenu={onRightClick}
     >
-      {value === 0 ? '' : value.toString(16).toUpperCase()}
+      {value === 0 ? '' : value.toString(17).toUpperCase()}
     </div>
   );
 };

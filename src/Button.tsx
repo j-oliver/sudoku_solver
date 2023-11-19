@@ -1,19 +1,28 @@
-import { ButtonHTMLAttributes, ReactNode, FC } from 'react';
+import { ReactNode, FC, HTMLAttributes } from 'react';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends HTMLAttributes<HTMLDivElement> {
+  disabled?: boolean;
   children: ReactNode;
 }
 
 export const Button: FC<ButtonProps> = ({
   children,
   className,
+  disabled,
   ...buttonProps
 }) => {
-  const cssClass = `shadow-md p-2 border-2 rounded-lg hover:filter hover:brightness-95 ${className}`;
+  function onClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (disabled) return;
+    buttonProps.onClick && buttonProps.onClick(event);
+  }
 
   return (
-    <button {...buttonProps} className={cssClass}>
+    <div
+      {...buttonProps}
+      onClick={onClick}
+      className={`flex cursor-pointer items-center justify-center rounded-lg border-2 p-2 shadow-md hover:brightness-95 hover:filter ${className}`}
+    >
       {children}
-    </button>
+    </div>
   );
 };

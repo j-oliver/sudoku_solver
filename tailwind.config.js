@@ -6,7 +6,7 @@ export default {
       colors: {
         difficulty: {
           easy: '#16d31d',
-          medium: '#eff400',
+          medium: '#f4be00',
           hard: '#d35a16',
           extreme: '#c81f1f',
         },

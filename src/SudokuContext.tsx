@@ -4,11 +4,13 @@ import {
   Reducer,
   createContext,
   useCallback,
+  useEffect,
+  useMemo,
   useReducer,
   useState,
 } from 'react';
 import { Difficulty, Size, Sudoku } from './types';
-import { solveSudoku, createNewSudoku } from './core/sudoku';
+import { createNewSudoku } from './core/sudoku';
 import { useTimer } from './useTimer';
 import {
   Action,
@@ -25,6 +27,9 @@ type SudokuContextProps = {
   difficulty: Difficulty;
   hasNext: boolean;
   hasPrev: boolean;
+  error: string;
+  isSolving: boolean;
+  abort: () => void;
   start: () => void;
   solve: () => void;
   undo: () => void;
@@ -45,6 +50,9 @@ export const SudokuContext = createContext<SudokuContextProps>({
   difficulty: 'easy',
   hasNext: false,
   hasPrev: false,
+  error: '',
+  isSolving: false,
+  abort: () => {},
   start: () => {},
   solve: () => {},
   undo: () => {},
@@ -64,14 +72,51 @@ type Props = {
 export const SudokuContextProvider: FC<Props> = ({ children }) => {
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
   const [size, setSize] = useState<Size>(3);
-  const [initialSudoku, setInitialSudoku] = useState(() =>
-    createNewSudoku(size, difficulty),
-  );
+  const [initialSudoku, setInitialSudoku] = useState<Sudoku>();
   const [sudokuHistory, dispatch] = useReducer<Reducer<State, Action>>(
     arrayReducer,
     initialState,
   );
+  const [isSolving, setIsSolving] = useState(false);
+  const [error, setError] = useState('');
   const { time, stop, reset, startTimer } = useTimer();
+
+  const worker: Worker = useMemo(
+    () => new Worker(new URL('./core/solve.ts', import.meta.url)),
+    [],
+  );
+
+  useEffect(() => {
+    if (window.Worker) {
+      worker.onmessage = (e: MessageEvent<string>) => {
+        const response = e.data as unknown as {
+          error: string;
+          solvedSudoku: Sudoku;
+        };
+        console.log(e.data);
+        if (response.error) {
+          setError(response.error);
+        } else {
+          dispatch({ type: 'OVERWRITE', sudoku: response.solvedSudoku });
+          setError('');
+          stop();
+        }
+        setIsSolving(false);
+      };
+    }
+  }, [worker, stop]);
+
+  const abort = useCallback(() => {
+    worker.terminate();
+    setIsSolving(false);
+  }, [worker, setIsSolving]);
+
+  const solve = useCallback(() => {
+    if (isSolving) return;
+    if (!sudokuHistory.data) return;
+    setIsSolving(true);
+    worker.postMessage({ sudoku: sudokuHistory.data });
+  }, [sudokuHistory, worker, isSolving]);
 
   const setNumber = (number: number, rindex: number, cindex: number) => {
     dispatch({ type: 'INSERT', num: number, r: rindex, c: cindex });
@@ -81,17 +126,18 @@ export const SudokuContextProvider: FC<Props> = ({ children }) => {
     dispatch({ type: 'REMOVE', r: rindex, c: cindex });
   };
 
-  const solve = useCallback(() => {
-    if (!sudokuHistory.data) return;
+  // const solve = useCallback(() => {
+  //   if (!sudokuHistory.data) return;
 
-    const solvedSudoku = solveSudoku(sudokuHistory.data);
+  //   setIsSolving(true);
+  //   solveSudoku(sudokuHistory.data)
+  //     })
+  //     .catch(setError)
+  //     .finally(() => setIsSolving(false));
+  // }, [sudokuHistory, stop]);
 
-    dispatch({ type: 'OVERWRITE', sudoku: solvedSudoku });
-    stop();
-  }, [sudokuHistory, stop]);
-
-  const createSudoku = (size: Size, difficulty: Difficulty) => {
-    const initialSudoku = createNewSudoku(size, difficulty);
+  const createSudoku = async (size: Size, difficulty: Difficulty) => {
+    const initialSudoku = await createNewSudoku(size, difficulty);
     const sudoku = initialSudoku.map((row: number[]) => row.slice());
 
     setInitialSudoku(initialSudoku);
@@ -99,6 +145,7 @@ export const SudokuContextProvider: FC<Props> = ({ children }) => {
     setDifficulty(difficulty);
     dispatch({ type: 'RESET' });
     dispatch({ type: 'OVERWRITE', sudoku: sudoku });
+    setError('');
   };
 
   const start = useCallback(() => {
@@ -109,9 +156,13 @@ export const SudokuContextProvider: FC<Props> = ({ children }) => {
   }, [sudokuHistory, reset, startTimer]);
 
   const resetSudoku = useCallback(() => {
-    const resetSudoku = initialSudoku.map((row: number[]) => row.slice());
-    dispatch({ type: 'OVERWRITE', sudoku: resetSudoku });
-  }, [initialSudoku]);
+    const resetSudoku = initialSudoku?.map((row: number[]) => row.slice());
+    if (resetSudoku) {
+      dispatch({ type: 'OVERWRITE', sudoku: resetSudoku });
+      startTimer();
+      setError('');
+    }
+  }, [initialSudoku, startTimer]);
 
   const hasNext = sudokuHistory.currentIndex < sudokuHistory.history.length - 1;
   const hasPrev = sudokuHistory.currentIndex > 0;
@@ -126,6 +177,9 @@ export const SudokuContextProvider: FC<Props> = ({ children }) => {
         difficulty,
         hasNext,
         hasPrev,
+        error,
+        isSolving,
+        abort,
         start,
         solve,
         undo: () => dispatch({ type: 'UNDO' }),
